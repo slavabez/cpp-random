@@ -13,3 +13,11 @@ Particle::Particle() {
 Particle::~Particle() {
 
 }
+
+void Particle::update() {
+    const double xspeed = 0.001 * rand()/RAND_MAX;
+    const double yspeed = 0.001 * rand()/RAND_MAX;
+
+    m_x += xspeed;
+    m_y += yspeed;
+}

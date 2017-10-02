@@ -40,11 +40,17 @@ int main() {
         // Check for messages/events
 
         int elapsed = SDL_GetTicks();
+
+        swarm.update();
+
+
         unsigned char green = (1 + sin(elapsed * 0.0001)) * 128;
         unsigned char red = (1 + sin(elapsed * 0.0002)) * 128;
         unsigned char blue = (1 + sin(elapsed * 0.0003)) * 128;
 
         const Particle * const particles = swarm.getParticles();
+
+        screen.clear();
 
         // Draw the particles
         for (int i = 0; i < Swarm::N_PARTICLES; i++) {

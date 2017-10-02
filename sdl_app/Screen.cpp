@@ -80,6 +80,10 @@ namespace sdlapp {
         SDL_RenderPresent(m_renderer);
     }
 
+    void Screen::clear() {
+        memset(m_buffer, 0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(Uint32));
+    }
+
     void Screen::setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue) {
 
         if (x < 0 || x >= SCREEN_WIDTH || y < 0 || y >= SCREEN_HEIGHT){
@@ -98,4 +102,6 @@ namespace sdlapp {
 
         m_buffer[(y * SCREEN_WIDTH) + x] = color;
     }
+
+
 }

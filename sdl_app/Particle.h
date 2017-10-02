@@ -16,7 +16,7 @@ public:
     Particle();
     virtual ~Particle();
 
-
+    void update();
 };
 
 
