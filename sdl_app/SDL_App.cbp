@@ -78,6 +78,12 @@
 		<Unit filename="/home/slava/CLionProjects/cpp-random/sdl_app/Screen.h">
 			<Option target="SDL_App"/>
 		</Unit>
+		<Unit filename="/home/slava/CLionProjects/cpp-random/sdl_app/Swarm.cpp">
+			<Option target="SDL_App"/>
+		</Unit>
+		<Unit filename="/home/slava/CLionProjects/cpp-random/sdl_app/Swarm.h">
+			<Option target="SDL_App"/>
+		</Unit>
 		<Unit filename="/home/slava/CLionProjects/cpp-random/sdl_app/sdl_app.cpp">
 			<Option target="SDL_App"/>
 		</Unit>
