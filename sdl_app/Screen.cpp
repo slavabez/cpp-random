@@ -7,7 +7,7 @@
 
 
 namespace sdlapp {
-    Screen::Screen() : m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer(NULL) {}
+    Screen::Screen() : m_window(NULL), m_renderer(NULL), m_texture(NULL), m_buffer1(NULL), m_buffer2(NULL) {}
 
     bool Screen::init() {
         if (SDL_Init(SDL_INIT_VIDEO) < 0){
@@ -43,10 +43,11 @@ namespace sdlapp {
             return false;
         }
 
-        m_buffer = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
+        m_buffer1 = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
+        m_buffer2 = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
 
         for (int i = 0; i < SCREEN_HEIGHT * SCREEN_WIDTH; i++){
-            m_buffer[i] = 0x00000080;
+            m_buffer1[i] = 0x00000080;
         }
 
         return true;
@@ -65,7 +66,8 @@ namespace sdlapp {
     }
 
     void Screen::close() {
-        delete [] m_buffer;
+        delete [] m_buffer1;
+        delete [] m_buffer2;
         SDL_DestroyRenderer(m_renderer);
         SDL_DestroyTexture(m_texture);
         SDL_DestroyWindow(m_window);
@@ -74,14 +76,10 @@ namespace sdlapp {
 
 
     void Screen::update() {
-        SDL_UpdateTexture(m_texture, NULL, m_buffer, SCREEN_WIDTH * sizeof(Uint32));
+        SDL_UpdateTexture(m_texture, NULL, m_buffer1, SCREEN_WIDTH * sizeof(Uint32));
         SDL_RenderClear(m_renderer);
         SDL_RenderCopy(m_renderer, m_texture, NULL, NULL);
         SDL_RenderPresent(m_renderer);
-    }
-
-    void Screen::clear() {
-        memset(m_buffer, 0, SCREEN_HEIGHT * SCREEN_WIDTH * sizeof(Uint32));
     }
 
     void Screen::setPixel(int x, int y, Uint8 red, Uint8 green, Uint8 blue) {
@@ -100,7 +98,53 @@ namespace sdlapp {
         color <<= 8;
         color += 0xFF;
 
-        m_buffer[(y * SCREEN_WIDTH) + x] = color;
+        m_buffer1[(y * SCREEN_WIDTH) + x] = color;
+    }
+
+    void Screen::boxBlur() {
+        // Swap the buffers, pixel info goes into buffer 2, drawing to buffer 1
+        Uint32 * temp = m_buffer1;
+
+        m_buffer1 = m_buffer2;
+        m_buffer2 = temp;
+
+        for (int y = 0; y < SCREEN_HEIGHT; y++) {
+            for (int x = 0; x < SCREEN_WIDTH; x++) {
+
+                // Blur the pixel colour by averaging RGB values of 8 surrounding pixels
+                int redTotal = 0;
+                int greenTotal = 0;
+                int blueTotal = 0;
+
+                for (int row = -1; row <= 1; row++) {
+                    for (int col = -1; col <= 1; col++){
+                        int pixelX = x + col;
+                        int pixelY = y + row;
+
+                        if (pixelX >= 0 && pixelX < SCREEN_WIDTH && pixelY >= 0 && pixelY < SCREEN_HEIGHT){
+                            Uint32 colour = m_buffer2[pixelY * SCREEN_WIDTH + pixelX];
+
+                            Uint8 red = colour >> 24;
+                            Uint8 green = colour >> 16;
+                            Uint8 blue = colour >> 8;
+
+                            redTotal += red;
+                            greenTotal += green;
+                            blueTotal += blue;
+                        }
+
+                    }
+                }
+
+                // Added the averages
+                Uint8 red = redTotal / 9;
+                Uint8 green = greenTotal / 9;
+                Uint8 blue = blueTotal / 9;
+
+                setPixel(x, y, red, green, blue);
+
+            }
+        }
     }
 
 

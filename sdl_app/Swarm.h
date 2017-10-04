@@ -12,12 +12,13 @@ public:
     const static int N_PARTICLES = 5000;
 private:
     Particle * const m_pParticles;
+    int lastTime;
 
 public:
     Swarm();
     virtual ~Swarm();
 
-    void virtual update();
+    void virtual update(int elapsed);
 
     Particle * const getParticles() {
         return m_pParticles;
