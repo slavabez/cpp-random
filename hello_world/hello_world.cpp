@@ -3,27 +3,40 @@
 //
 
 #include <iostream>
-#include <iomanip>
-
+#include <fstream>
+using namespace std;
 
 int main(){
 
-    unsigned char red = 0xAA;
-    unsigned char green = 0xBB;
-    unsigned char blue = 0xCC;
-    unsigned char alpha = 0xDD;
+    string filename = "stats.txt";
+    ifstream input;
 
-    unsigned int color;
+    input.open(filename);
 
-    color += red;
-    color <<= 8;
-    color += green;
-    color <<= 8;
-    color += blue;
-    color <<= 4;
-    color += alpha;
+    if (!input.is_open()){
+        return 1;
+    }
 
-    std::cout << std::setw(8) << std::hex << color << std::endl;
+    while(input){
+        string line;
+
+        getline(input, line, ':');
+
+        int population;
+        input >> population;
+
+        input >> ws;
+
+        if (!input){
+            break;
+        }
+
+        cout << "'" << line << "'" << " -- " << "'" << population << "'" << endl;
+    }
+
+    input.close();
+
+
 
     return 0;
 }
