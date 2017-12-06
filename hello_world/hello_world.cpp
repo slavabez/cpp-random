@@ -4,38 +4,63 @@
 
 #include <iostream>
 #include <fstream>
+
 using namespace std;
 
-int main(){
 
-    string filename = "stats.txt";
-    ifstream input;
+#pragma pack(push, 1)
 
-    input.open(filename);
+struct Person {
+    char name[50];
+    int age;
+    double weight;
+};
 
-    if (!input.is_open()){
-        return 1;
+#pragma pack(pop)
+
+int main() {
+
+    Person someone = {"Frodo", 220, 65.5};
+
+    string fileName = "test.bin";
+
+    /*
+     * Write binary file
+     */
+
+    ofstream outputFile;
+
+    outputFile.open(fileName, ios::binary);
+
+    if (outputFile.is_open()){
+
+        outputFile.write(reinterpret_cast<char *>(&someone), sizeof(Person));
+
+        outputFile.close();
+    } else {
+        cout << "Could not create file " << fileName << endl;
     }
 
-    while(input){
-        string line;
+    /*
+     * Read binary file
+     */
 
-        getline(input, line, ':');
+    Person someoneElse = {};
 
-        int population;
-        input >> population;
+    ifstream inputFile;
 
-        input >> ws;
+    inputFile.open(fileName, ios::binary);
 
-        if (!input){
-            break;
-        }
+    if (inputFile.is_open()){
 
-        cout << "'" << line << "'" << " -- " << "'" << population << "'" << endl;
+        inputFile.read(reinterpret_cast<char *>(&someoneElse), sizeof(Person));
+
+        inputFile.close();
+    } else {
+        cout << "Could not create file " << fileName << endl;
     }
 
-    input.close();
-
+    cout << someoneElse.name << ", " << someoneElse.age << ", " << someoneElse.weight << endl;
 
 
     return 0;
