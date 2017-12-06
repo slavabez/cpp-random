@@ -9,24 +9,14 @@ using namespace std;
 
 int main() {
 
-    // Vectors are template classes
-    vector<double> numbers(0);
+    vector< vector<int> > grid(3, vector<int>(4, 7));
 
-    cout << "Size: " << numbers.size() << ", bytes: " << sizeof(numbers) << endl;
-
-    auto capacity = numbers.capacity();
-
-    cout << "Capacity: " << capacity << endl;
-
-    for(int i=0; i < 10000; i++){
-        if (numbers.capacity() != capacity){
-            capacity = numbers.capacity();
-            cout << "New capacity: " << capacity << ", because exceeded size: " << numbers.size() << ", bytes: " << numbers.size() << endl;
+    for(int row = 0; row < grid.size(); row++){
+        for (int col = 0; col < grid[row].size(); col++){
+            cout << grid[row][col] << flush;
         }
-        numbers.emplace_back(i);
+        cout << endl;
     }
-
-    cout << "Final capacity: " << capacity << ", size: " << numbers.size() << ", bytes: " << numbers.size() << endl;
 
     return 0;
 }
