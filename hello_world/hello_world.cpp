@@ -10,18 +10,23 @@ using namespace std;
 int main() {
 
     // Vectors are template classes
-    vector<string> strings;
+    vector<double> numbers(0);
 
-    strings.emplace_back("one");
-    strings.emplace_back("two");
-    strings.emplace_back("three");
+    cout << "Size: " << numbers.size() << ", bytes: " << sizeof(numbers) << endl;
 
+    auto capacity = numbers.capacity();
 
+    cout << "Capacity: " << capacity << endl;
 
-    for (auto it = strings.begin(); it != strings.end(); it++){
-        cout << *it << ", size in bites: " << sizeof(*it)  << endl;
+    for(int i=0; i < 10000; i++){
+        if (numbers.capacity() != capacity){
+            capacity = numbers.capacity();
+            cout << "New capacity: " << capacity << ", because exceeded size: " << numbers.size() << ", bytes: " << numbers.size() << endl;
+        }
+        numbers.emplace_back(i);
     }
 
+    cout << "Final capacity: " << capacity << ", size: " << numbers.size() << ", bytes: " << numbers.size() << endl;
 
     return 0;
 }
