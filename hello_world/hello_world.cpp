@@ -3,19 +3,39 @@
 //
 
 #include <iostream>
-#include <vector>
+#include <list>
 
 using namespace std;
 
 int main() {
 
-    vector< vector<int> > grid(3, vector<int>(4, 7));
+    list<int> numbers;
 
-    for(int row = 0; row < grid.size(); row++){
-        for (int col = 0; col < grid[row].size(); col++){
-            cout << grid[row][col] << flush;
+    numbers.push_back(1);
+    numbers.push_back(2);
+    numbers.push_back(3);
+    numbers.push_front(5);
+
+    auto eraseIt = numbers.begin();
+
+    eraseIt = numbers.erase(eraseIt);
+
+    cout << "Element: " << *eraseIt << endl;
+
+    for(auto it = numbers.begin(); it != numbers.end();){
+        if (*it == 2){
+            numbers.insert(it, 1234);
         }
-        cout << endl;
+
+        if (*it == 1){
+            it = numbers.erase(it);
+        } else {
+            it++;
+        }
+    }
+
+    for(auto it = numbers.begin(); it != numbers.end(); it++){
+        cout << *it << endl;
     }
 
     return 0;
