@@ -3,40 +3,33 @@
 //
 
 #include <iostream>
-#include <list>
+#include <map>
 
 using namespace std;
 
 int main() {
 
-    list<int> numbers;
+    map<string, int> ages;
 
-    numbers.push_back(1);
-    numbers.push_back(2);
-    numbers.push_back(3);
-    numbers.push_front(5);
+    ages["Mike"] = 40;
+    ages["Raj"] = 30;
+    ages["Vicky"] = 50;
 
-    auto eraseIt = numbers.begin();
+    ages["Mike"] = 70;
 
-    eraseIt = numbers.erase(eraseIt);
+    ages.insert(make_pair("Peter", 100));
 
-    cout << "Element: " << *eraseIt << endl;
-
-    for(auto it = numbers.begin(); it != numbers.end();){
-        if (*it == 2){
-            numbers.insert(it, 1234);
-        }
-
-        if (*it == 1){
-            it = numbers.erase(it);
-        } else {
-            it++;
-        }
+    if (ages.find("Sue") != ages.end()){
+        cout << "Found Sue" << endl;
+    } else {
+        cout << "Did not find Sue" << endl;
     }
 
-    for(auto it = numbers.begin(); it != numbers.end(); it++){
-        cout << *it << endl;
+    for(auto it = ages.begin(); it != ages.end(); it++){
+        cout << it->first << ", " << it->second << endl;
     }
+
+    cout << "Size of the whole map: " << ages.size() << endl;
 
     return 0;
 }
