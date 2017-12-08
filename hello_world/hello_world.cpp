@@ -3,46 +3,51 @@
 //
 
 #include <iostream>
-#include <stack>
-#include <queue>
-#include <utility>
+#include <vector>
+#include <algorithm>
 
 using namespace std;
 
-struct Test {
+class Test {
+    int id;
     string name;
 
 public:
-
-    explicit Test(string name) : name(std::move(name)) {};
-
-    ~Test();
+    Test(int id, string name): id(id), name(std::move(name)) {};
 
     void print() {
-        cout << name << endl;
+        cout << this->id << ": " << this->name << endl;
     }
 
+    /*bool operator < (const Test& other) const {
+        if (name == other.name){
+            return id < other.id;
+        } else {
+            return name < other.name;
+        }
+
+    }*/
+
+    friend bool comp(const Test &a, const Test &b);
 };
 
-Test::~Test() = default;
+bool comp(const Test &a, const Test &b){
+    return a.name < b.name;
+}
 
 int main() {
 
-    // Stacks are last-in-first-out (LIFO) collections
-    // Queues are first-in-first-out (FIFO) collections
-    queue<Test> testQueue;
+    vector<Test> tests;
 
-    testQueue.push(Test("Smith"));
-    testQueue.push(Test("Alex"));
-    testQueue.push(Test("Jon"));
+    tests.emplace_back(1, "Mike");
+    tests.emplace_back(10, "Sue");
+    tests.emplace_back(5, "Raj");
+    tests.emplace_back(15, "Hussain");
 
+    sort(tests.begin(), tests.end(), comp);
 
-
-    while(!testQueue.empty()){
-        Test &test = testQueue.front();
+    for (auto &test : tests) {
         test.print();
-
-        testQueue.pop();
     }
 
 
