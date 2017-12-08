@@ -3,48 +3,63 @@
 //
 
 #include <iostream>
-#include <map>
-#include <utility>
+#include <set>
 
 using namespace std;
 
-struct Person {
+struct Test {
+    int id;
     string name;
-    int age;
 
-    Person(): name(""), age(0){};
+public:
+    Test(): id(0), name("") {};
+    Test(int id, string name): id(id), name(move(name)) {};
 
-    Person(string name, int age): name(std::move(name)), age(age){};
-
-    Person(const Person &another){
-        cout << "Using the copy constructor" << endl;
-        name = another.name;
-        age = another.age;
+    void print() const {
+        cout << "ID: " << id << ", Name: " << name << endl;
     }
 
-    // Overriding the < operator to allow it to be added as a key to a Map
-    bool operator < (const Person &other) const {
-        if (name == other.name){
-            return age < other.age;
-        } else {
-            return name < other.name;
-        }
+    bool operator < (const Test &other) const {
+        return id < other.id;
     }
-
 };
 
 int main() {
 
-    map<Person, int> people;
+    set<int> numbers;
 
-    people[Person("Mike", 20)] = 1;
-    people[Person("Mike", 222)] = 222;
-    people[Person("Olaf", 30)] = 2;
-    people[Person("Geoff", 40)] = 3;
+    numbers.insert(1);
+    numbers.insert(5);
+    numbers.insert(3);
+    numbers.insert(7);
+    numbers.insert(1);
 
-    for (auto &it : people) {
-        cout << it.second << ", " << it.first.name << ", " << it.first.age << " years old" << endl;
+
+
+    for (auto &n: numbers){
+        cout << n << ". ";
     }
+
+    // Finding a value
+    auto itFind = numbers.find(7);
+
+    if (numbers.count(7)){
+        cout << endl << "Found value: 7";
+    }
+
+    cout << endl;
+
+    // Set with a struct
+    set<Test> tests;
+
+    tests.insert(Test(5, "Mike"));
+    tests.insert(Test(7, "Dave"));
+    tests.insert(Test(12, "Joe"));
+
+    for (auto it = tests.begin(); it != tests.end(); it++){
+        it->print();
+    }
+
 
     return 0;
 }
