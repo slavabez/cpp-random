@@ -3,61 +3,46 @@
 //
 
 #include <iostream>
-#include <set>
+#include <stack>
+#include <queue>
+#include <utility>
 
 using namespace std;
 
 struct Test {
-    int id;
     string name;
 
 public:
-    Test(): id(0), name("") {};
-    Test(int id, string name): id(id), name(move(name)) {};
 
-    void print() const {
-        cout << "ID: " << id << ", Name: " << name << endl;
+    explicit Test(string name) : name(std::move(name)) {};
+
+    ~Test();
+
+    void print() {
+        cout << name << endl;
     }
 
-    bool operator < (const Test &other) const {
-        return id < other.id;
-    }
 };
+
+Test::~Test() = default;
 
 int main() {
 
-    set<int> numbers;
+    // Stacks are last-in-first-out (LIFO) collections
+    // Queues are first-in-first-out (FIFO) collections
+    queue<Test> testQueue;
 
-    numbers.insert(1);
-    numbers.insert(5);
-    numbers.insert(3);
-    numbers.insert(7);
-    numbers.insert(1);
+    testQueue.push(Test("Smith"));
+    testQueue.push(Test("Alex"));
+    testQueue.push(Test("Jon"));
 
 
 
-    for (auto &n: numbers){
-        cout << n << ". ";
-    }
+    while(!testQueue.empty()){
+        Test &test = testQueue.front();
+        test.print();
 
-    // Finding a value
-    auto itFind = numbers.find(7);
-
-    if (numbers.count(7)){
-        cout << endl << "Found value: 7";
-    }
-
-    cout << endl;
-
-    // Set with a struct
-    set<Test> tests;
-
-    tests.insert(Test(5, "Mike"));
-    tests.insert(Test(7, "Dave"));
-    tests.insert(Test(12, "Joe"));
-
-    for (auto it = tests.begin(); it != tests.end(); it++){
-        it->print();
+        testQueue.pop();
     }
 
 
