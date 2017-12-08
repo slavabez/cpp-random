@@ -19,14 +19,19 @@ public:
         cout << this->id << ": " << this->name << endl;
     }
 
-    /*bool operator < (const Test& other) const {
+    /**
+     * Overriding the < operator because it's the default operator for the sort function
+     * @param other
+     * @return
+     */
+    bool operator < (const Test& other) const {
         if (name == other.name){
             return id < other.id;
         } else {
             return name < other.name;
         }
 
-    }*/
+    }
 
     friend bool comp(const Test &a, const Test &b);
 };
