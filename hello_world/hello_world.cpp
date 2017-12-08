@@ -4,32 +4,47 @@
 
 #include <iostream>
 #include <map>
+#include <utility>
 
 using namespace std;
 
+struct Person {
+    string name;
+    int age;
+
+    Person(): name(""), age(0){};
+
+    Person(string name, int age): name(std::move(name)), age(age){};
+
+    Person(const Person &another){
+        cout << "Using the copy constructor" << endl;
+        name = another.name;
+        age = another.age;
+    }
+
+    // Overriding the < operator to allow it to be added as a key to a Map
+    bool operator < (const Person &other) const {
+        if (name == other.name){
+            return age < other.age;
+        } else {
+            return name < other.name;
+        }
+    }
+
+};
+
 int main() {
 
-    map<string, int> ages;
+    map<Person, int> people;
 
-    ages["Mike"] = 40;
-    ages["Raj"] = 30;
-    ages["Vicky"] = 50;
+    people[Person("Mike", 20)] = 1;
+    people[Person("Mike", 222)] = 222;
+    people[Person("Olaf", 30)] = 2;
+    people[Person("Geoff", 40)] = 3;
 
-    ages["Mike"] = 70;
-
-    ages.insert(make_pair("Peter", 100));
-
-    if (ages.find("Sue") != ages.end()){
-        cout << "Found Sue" << endl;
-    } else {
-        cout << "Did not find Sue" << endl;
+    for (auto &it : people) {
+        cout << it.second << ", " << it.first.name << ", " << it.first.age << " years old" << endl;
     }
-
-    for(auto it = ages.begin(); it != ages.end(); it++){
-        cout << it->first << ", " << it->second << endl;
-    }
-
-    cout << "Size of the whole map: " << ages.size() << endl;
 
     return 0;
 }
